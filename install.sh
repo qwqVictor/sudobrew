@@ -28,20 +28,14 @@ printf "Press any key to continue..."
 read -sn 1
 echo -e "\n\n";
 echo -e "Repairing Permissions..."
-sudo chown root:admin /usr/local/bin /usr/local/etc /usr/local/include /usr/local/lib /usr/local/sbin /usr/local/share /usr/local/var /usr/local/Frameworks /usr/local/opt
-sudo chown -R root:admin /usr/local/Caskroom /usr/local/Cellar /usr/local/Homebrew
+sudo chown root:wheel /usr/local/bin /usr/local/etc /usr/local/include /usr/local/lib /usr/local/sbin /usr/local/share /usr/local/var /usr/local/Frameworks /usr/local/opt
+sudo chown -R root:wheel /usr/local/Caskroom /usr/local/Cellar /usr/local/Homebrew
 echo -e "Initializing config file..."
 sudo touch /etc/defaults/homebrew.conf
 sudo cp bin/cask /usr/local/bin
 sudo cp bin/pkg /usr/local/bin
 sudo cp bin/services /usr/local/bin
 sudo chmod a+x /usr/local/bin/cask /usr/local/bin/pkg /usr/local/bin/services
-sudo sudo -u root -g admin /bin/echo -e > /dev/null 2> /dev/null
-echo -e "Enabling sudo -g for root..."
-backup_id=$RANDOM
-echo -e "Backed up /etc/sudoers to /etc/sudoers.$backup_id"
-sudo cp /etc/sudoers /etc/sudoers.bak.$backup_id
-sudo /usr/bin/sed 's/root\ ALL=(ALL)\ ALL/root\ ALL=(ALL:ALL)\ ALL/' /etc/sudoers.bak | sudo /usr/bin/tee /etc/sudoers > /dev/null 2> /dev/null
 echo -e "Done."
 echo -e "\n\n"
 echo -e "Please use: "
