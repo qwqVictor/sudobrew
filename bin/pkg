@@ -14,13 +14,38 @@ if [[ $1 = "services" ]]; then
   exec services $@; 
 fi
 
-if [[ "$(/usr/bin/id -u)" != $ROOT_UID && "$(/usr/bin/id -g)" != $ADMIN_GID ]]; then
-	sudo sudo -u root -g admin /bin/echo > /dev/null 2> /dev/null
-	if [[ $? = 1 ]]; then
-		sudo cp /etc/sudoers /etc/sudoers.bak
-		sudo /usr/bin/sed 's/root\ ALL=(ALL)\ ALL/root\ ALL=(ALL:ALL)\ ALL/' /etc/sudoers.bak | sudo /usr/bin/tee /etc/sudoers > /dev/null 2> /dev/null
-	fi
-	exec sudo sudo -u root -g admin $0 $@
+if [[ $1 = "repair-sudo" ]]; then
+  shift
+  sudo sudo -u root -g admin /bin/echo > /dev/null 2> /dev/null
+  if [[ $? = 1 ]]; then
+    sudo cp /etc/sudoers /etc/sudoers.bak
+    sudo /usr/bin/sed 's/root\ ALL=(ALL)\ ALL/root\ ALL=(ALL:ALL)\ ALL/' /etc/sudoers.bak | sudo /usr/bin/tee /etc/sudoers > /dev/null 2> /dev/null
+    if [[ $? = 0 ]]; then
+      echo "Done."
+      exit 0
+    else
+      echo "Failed."
+      exit 1
+    fi
+  else
+    echo "Nothing to repair."
+    exit 1
+  fi
+fi
+
+if [[ "$(/usr/bin/id -u)" != "$ROOT_UID" ]]; then
+    echo "Root priviledge needed, sudo used."
+    exec sudo -u root $0 $@
+fi
+
+if [[ "$(/usr/bin/id -g)" != "$ADMIN_GID" ]]; then
+    if [[ "$(sudo -u root -g admin /usr/bin/id -g)" != "$ADMIN_GID" ]]; then
+      echo
+      echo -e "\033[31mAttention\033[0m: Change-groups priviledge for sudo is needed. If you have already typed correct password, There might be some repair needed."
+      echo "To repair please type: $0 repair-sudo"
+      exit 1;
+    fi
+    exec sudo -u root -g admin $0 $@;
 fi
 
 function id() {
