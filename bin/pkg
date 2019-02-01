@@ -13,8 +13,12 @@ if [[ $1 = "services" ]]; then
   exec services $@; 
 fi
 
+if [[ "$(/usr/bin/id -u)" = "$ROOT_UID" && $HOME != "$(sudo -i -u root printf '$HOME')"  ]]; then
+  exec sudo -H -u root $0 $@
+fi
+
 if [[ "$(/usr/bin/id -u)" != "$ROOT_UID" ]]; then
-    exec sudo -u root $0 $@
+  exec sudo -H -u root $0 $@
 fi
 
 function id() {
