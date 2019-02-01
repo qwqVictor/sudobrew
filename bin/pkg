@@ -34,7 +34,6 @@ if [[ $1 = "repair-sudo" ]]; then
 fi
 
 if [[ "$(/usr/bin/id -u)" != "$ROOT_UID" ]]; then
-    echo "Root priviledge needed, sudo used."
     exec sudo -u root $0 $@
 fi
 
