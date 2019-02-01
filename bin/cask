@@ -1,2 +1,6 @@
 #!/bin/bash
+if [[ $1 == "search" ]]; then
+	shift
+	exec brew search $@
+fi
 exec brew cask $@

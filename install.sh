@@ -29,7 +29,9 @@ read -sn 1
 echo -e "\n\n";
 echo -e "Repairing Permissions..."
 sudo chown root:wheel /usr/local/bin /usr/local/etc /usr/local/include /usr/local/lib /usr/local/sbin /usr/local/share /usr/local/var /usr/local/Frameworks /usr/local/opt
-sudo chown -R root:wheel /usr/local/Caskroom /usr/local/Cellar /usr/local/Homebrew
+sudo chown -R root:wheel /usr/local/Cellar /usr/local/Homebrew
+sudo chown -R root:staff /usr/local/Caskroom
+sudo chmod -R 775 /usr/local/Caskroom
 echo -e "Initializing config file..."
 sudo touch /etc/defaults/homebrew.conf
 sudo cp bin/cask /usr/local/bin
