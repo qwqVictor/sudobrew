@@ -26,7 +26,7 @@ echo -e "${RED}Warning: ${TAILS} This is an alpha version, try it at your own ri
 printf "Press any key to continue..."
 echo "Changing the ownership of Homebrew directories..."
 sudo chown -R $(whoami) /usr/local/bin /usr/local/etc /usr/local/include /usr/local/lib /usr/local/sbin /usr/local/share /usr/local/var /usr/local/Frameworks /usr/local/opt /usr/local/Cellar /usr/local/Homebrew
-sudo chmod -R 755 /usr/local/Caskroom
+sudo chmod g-wx /usr/local/Caskroom
 echo "Removing commands..."
 sudo rm -f /usr/local/bin/pkg /usr/local/bin/cask /usr/local/bin/services
 echo "Done."
